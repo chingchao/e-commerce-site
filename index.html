@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8/">  -->
+	<title>电商首页</title>
+	<link rel="stylesheet" href="css/css.css">
+	<link rel="shoutchu icon" href="img/100du.ico">
+	<script src="js/jquery-3.1.0.js" ></script>
+	<script>
+	$(function(){
+
+		/*城市选项*/ 
+		(function(){
+			var aCity=$('.city').find('a'); 
+			for (var i = 0; i < aCity.length; i++) {
+				$(aCity).click(function(){
+					$(this).parent().find('a').removeClass('active');
+					$(this).addClass('active');
+				});
+			}
+		})();
+
+		/*搜索切换 */
+		(function(){
+			var aLi=$('.bar').find('li');
+			var arrText=[
+				'例如：荷棠鱼坊烤鱼 或 樱花日本料理',
+				'例如：成都警方寻找蓝衣哥',
+	            '例如：揭开成都“1.5绕”面纱',
+	            '例如：10月起成都推广国Ⅴ汽油和柴油',
+				'例如：四川网友反映公园停工问题获解决',
+			];
+			var iNow=0;
+			var oText=$('.bar').find('.text');
+			// $(aLi).each(function(index){
+			// 	$(this).click(function(){
+			// 		alert(index);
+			// 	});
+			// });
+			$(oText).val(arrText[0]);
+			$(aLi).click(function(){
+				$(this).parent().find('li').attr('class','');
+				$(this).attr('class','active');
+				// alert($(this).index());
+				iNow=$(this).index();
+				oText.val(arrText[iNow]);
+			});
+
+			oText.focus(function(){
+				if ($(this).val()==arrText[iNow]) {
+					$(this).val('');
+				}
+			});
+
+			oText.blur(function(){
+				if ($(this).val()=='') {
+					$(this).val(arrText[iNow]);
+				}
+			});
+		})();
+
+		/*update tab*/
+		(function(){
+			var oUl=$('.update').find('.wrap').find('ul');
+			var Hli=0;
+			var BtnUp=$('.update').find('a').eq(0);
+			var BtnDown=$('.update').find('a').eq(1);
+			var oDiv=$('.update');
+			var n=0;
+			var timer=null;
+			var arrLi=[
+				{'name': '萱萱','time': '5分钟前','title': '写了一篇新文章：那些灿烂华美的瞬间…'},
+				{'name': '畅畅','time': '6分钟前','title': '写了一篇新文章：那些灿烂华美的瞬间…'},
+				{'name': '萱萱','time': '7分钟前','title': '写了一篇新文章：那些灿烂华美的瞬间…'},
+				{'name': '畅畅','time': '8分钟前','title': '写了一篇新文章：那些灿烂华美的瞬间…'},
+				{'name': '萱萱','time': '9分钟前','title': '写了一篇新文章：那些灿烂华美的瞬间…'},
+				{'name': '畅畅','time': '10分钟前','title': '写了一篇新文章：那些灿烂华美的瞬间…'}
+			]
+			var str='';
+			for(var i=0; i<arrLi.length; i++){
+				str+='<li> <strong class="span1">'+arrLi[i].name+'</strong> <span class="span2">'+arrLi[i].time+'</span> '+arrLi[i].title+'</li>'
+			}
+			oUl.append(str);
+			var aLi=oUl.find('li');
+			Hli=oUl.find($('li')).height();
+			// alert(aLi.length);
+			BtnUp.click(function(){
+				// alert(n);
+				if (n==aLi.length-1) { n=-1;}
+				n++;
+				oUl.animate({top:-n*Hli});
+			});
+			BtnDown.click(function(){
+				if (n==0) {
+					n=aLi.length;
+				}
+				n--;
+				oUl.animate({top:-n*Hli});
+			});
+			function doMove(){
+				timer=setInterval(function(){
+					if (n==aLi.length-1) { n=-1;}
+					n++;
+					oUl.animate({top:-n*Hli});
+				},2000);
+			};
+			doMove();
+			oDiv.hover(function(){
+				clearInterval(timer);
+			},function(){
+				doMove();
+			});
+		})();
+
+		/*选项卡切换*/
+		(function(){
+			tab($('.tabNav1'), 'click', $('.tabCon1'));
+			tab($('.tabNav2'), 'click', $('.tabCon2'));
+			tab($('.tabNav3'), 'mouseover', $('.tabCon3'));
+			tab($('.tabNav4'), 'mouseover', $('.tabCon4'));
+			function tab(nav, ontype, con){
+				var aNav=nav.children();
+				con.hide();
+				con.eq(0).show();
+				aNav.each(function(index){
+					if (ontype=='click') {
+						$(this).click(function(){
+							aNav.removeClass('active').addClass('gradient');
+							$(this).removeClass('gradient').addClass('active');
+							aNav.find('a').attr('class','triangle_down_gray');
+							$(this).find('a').attr('class','triangle_down_red');
+							con.hide();
+							con.eq(index).show();
+						});
+					}
+					else if (ontype=='mouseover') {
+						$(this).mouseover(function(){
+							aNav.removeClass('active').addClass('gradient');
+							$(this).removeClass('gradient').addClass('active');
+							aNav.find('a').attr('class','triangle_down_gray');
+							$(this).find('a').attr('class','triangle_down_red');
+							con.hide();
+							con.eq(index).show();
+						});
+					}
+				});
+			}
+		})();
+
+		/*图片切换*/
+		(function(){
+			var oDiv=$('.recommond').find('.pic_ul');
+			var aImg=oDiv.find('.img');
+			var aLi=oDiv.find('.ul1').find('li');
+			var oP=oDiv.find('p');
+			// aLi.hide();
+			var arrP=['爸爸去哪儿~','人物图片~','人物摄影光线处理~'];
+			var iNow=0;
+			var timer=null;
+
+			fade ();
+
+			function fade (){
+				aLi.each(function(i){
+					if (i!=iNow) {
+						aLi.eq(i).removeClass('active');
+						aImg.find('li').eq(i).css('zindex',1);
+						aImg.find('li').eq(i).fadeOut();
+					} else {
+						aLi.eq(i).addClass('active');
+						aImg.find('li').eq(i).css('zindex',2);
+						aImg.find('li').eq(i).fadeIn();
+					}
+					oP.html(arrP[iNow]);
+				});
+			};
+
+			aLi.click(function(){
+				iNow=$(this).index();
+				fade();
+			});
+
+			function doMove (){
+				timer=setInterval(function(){
+					iNow++;
+					iNow%=3;
+					fade();
+				},2000);
+			};
+			doMove();
+
+			oDiv.hover(function(){
+				clearInterval(timer);
+			},function(){
+				doMove();
+			});
+		})();
+
+		/*日历*/
+		(function(){
+			var aSpan=$('.calender h3 span');
+			var aImg=$('.calender').find('ol').find('.img2');
+			var oDiv=$('.today_activity');
+			var oImg=oDiv.find('.img img');
+			var oEm=oDiv.find('.text em');
+			var oP=oDiv.find('.text p');
+
+
+			aImg.hover(function(){
+				oDiv.show();
+				oDiv.css('left',$(this).parent().position().left+55);
+				oDiv.css('top',$(this).parent().position().top+5);
+				oImg.attr('src',$(this).attr('src'));
+				oP.html($(this).attr('info'));
+				oEm.html(aSpan.eq($(this).parent().index()%7).html());
+			},function(){
+				oDiv.hide();
+			});
+		})();
+
+		/*论坛切换*/
+		(function(){
+			// var oDiv=$('.bbs');
+			// var aLi=oDiv.find('li');
+			// aLi.hover(function(){
+			// 	aLi.attr('class','');
+			// 	$(this).attr('class','active');
+			// },function(){});
+ 			$('.bbs li').mouseover(function(){
+				$('.bbs li').attr('class','').eq($(this).index()).attr('class','active');
+			});
+		})();
+
+		/*红人烧客*/
+		(function(){
+			var aLi=$('.hot').find('li');
+			var arr=[ '',
+				'用户1<br>人气123',
+				'用户名：性感宝贝<br>区域：朝阳CBD <br>人气：124987b',
+				'用户3<br>人气123',
+				'用户4<br>人气123',
+				'用户5<br>人气123',
+				'用户6<br>人气123',
+				'用户7<br>人气123',
+				'用户8<br>人气123',
+				'用户9<br>人气123',
+				'用户10<br>人气123',
+			];
+			aLi.mouseover(function(){
+				if($(this).index()==0) {
+					return;
+				}
+				aLi.find('div').remove();
+				// alert($(this).index());
+				$(this).append('<div></div>');
+				$(this).find('div').append('<p style="width:'+($(this).width-10)+';height:'+($(this).height-10)+'">'+(arr[$(this).index()])+'</p>');
+			});
+		})();
+	});
+	</script>
+
+</head>
+<body>
+	<div id="header" class="gradient">
+		<p class="city">切换城市：
+			<a  class="active"  href="javascript:;">北京</a>
+			<a href="#">上海</a>
+			<a href="#">广州</a>
+			<a href="#">成都</a>
+			<a href="#">青岛</a>
+		</p>
+		<p class="link">
+			<a class="active" href="#">加盟100度</a>
+			<a href="#">店铺管理</a>
+		</p>
+	</div>
+
+	<div id="nav">
+		<ul class="nav1">
+			<li > <a class="bg1" href="#">美食</a></li>
+			<li > <a class="bg2" href="#">夜店</a></li>
+			<li> <a class="bg3" href="#">购物</a></li>
+			<li> <a class="bg4" href="#">文化</a></li>
+			<li> <a class="bg5" href="#">休闲</a></li>
+		</ul>
+		<h1><a href="#"><img src="img/logo.png" alt="100度享乐网"></a> </h1>
+		<ul class="nav2">
+			<li> <a class="bg6" href="#">烧客空间</a></li>
+			<li> <a class="bg7" href="#">知道分子</a></li>
+			<li> <a class="bg8" href="#">白吃白拿</a></li>
+			<li> <a class="bg9" href="#">烧客论坛</a></li>
+			<li> <a  class="bg10"href="#">企业俱乐部</a></li>
+		</ul>
+	</div>
+
+	<div id="search" class="gradient">
+		<div class="bar">
+			<ul class="menu">
+				<li class="active">搜店</li>
+				<li>地址</li>
+				<li>优惠券</li>
+				<li>全文</li>
+				<li>视频</li>
+			</ul>
+			<input class="text" type="text" value="">
+			<input class="btn" type="button" value="搜索">
+			<p>金钱豹、大江南、湘水之珠、德瑀楼 荷棠鱼坊烤鱼、SOHO尚都、湘味楼...</p>
+			<img src="img/search2.png" alt="">
+		</div>
+		<div class="update">
+			<div class="wrap">
+				<ul>
+					<!-- <li> <strong class="span1">萱萱</strong> <span class="span2">5分钟前</span> 写了一篇新文章：那些灿烂华美的瞬间…</li>
+					<li> <strong class="span1">畅畅</strong> <span class="span2">7分钟前</span> 写了一篇新文章：那些灿烂华美的瞬间…</li> -->
+				</ul>
+			</div>
+			<a class="triangle_up_red" href="javascript:;"></a>
+			<a class="triangle_down_red" href="javascript:;"></a>
+		</div>
+	</div>
+
+	<div class="content clear">
+
+		<div class="main fl">
+
+			<div class="clear">
+				<div class="section fl">
+					<div class="video">
+						<h2 class="video_title">WHAT’HOT</h2>
+						<img class="video_bg" src="img/video_bg.jpg" alt="">
+						<ul class="video_list">
+							<li>现场实录：杭州机场国航系统崩溃</li>
+							<li>现场实录：杭州机场系统崩溃</li>
+							<li>现场实录：杭州机场国航系统崩溃</li>
+						</ul>
+					</div>
+				</div>
+				<div class="options fr">
+					<ul class="nav tabNav1">
+						<li class="active fl">
+							<strong>HOT SHOP <span>红店铺</span></strong>
+							<a class="triangle_down_red" href="javascript:;"></a>
+						</li>
+						<li class="gradient fr">
+							<strong>NOW SHOP <span>新开张</span></strong>
+							<a class="triangle_down_gray" href="javascript:;"></a>
+						</li>
+					</ul>
+					<div class="con">
+						<ul class="con_list tabCon1">
+							<li>
+								<div class="img"> <a href="javascript:;"><img src="img/con_li_pic.jpg" alt=""></a></div>
+								<div class="text">
+									<h3> <a href="">御舟和涵珍园国际酒店</a></h3>
+									<p>区域：朝阳/CBD <br>人均：180元<br>人气：12321
+									</p>
+								</div>
+							</li>
+							<li>
+								<div class="img"> <a href="javascript:;"><img src="img/con_li_pic.jpg" alt=""></a></div>
+								<div class="text">
+									<h3> <a href="">御舟和涵珍园国际酒店</a></h3>
+									<p>区域：朝阳/CBD <br>人均：180元<br>人气：12321
+									</p>
+								</div>
+							</li>
+							<li>
+								<div class="img"> <a href="javascript:;"><img src="img/con_li_pic.jpg" alt=""></a></div>
+								<div class="text">
+									<h3> <a href="">御舟和涵珍园国际酒店</a></h3>
+									<p>区域：朝阳/CBD <br>人均：180元<br>人气：12321
+									</p>
+								</div>
+							</li>
+						</ul>
+						<ul class="con_list tabCon1">
+							<li>
+								<div class="img"> <a href="javascript:;"><img src="img/con_li_pic2.jpg" alt=""></a></div>
+								<div class="text">
+									<h3> <a href="">朝阳和珍园</a></h3>
+									<p>区域：朝阳/CBD <br>人均：180元<br>人气：12321
+									</p>
+								</div>
+							</li>
+							<li>
+								<div class="img"> <a href="javascript:;"><img src="img/con_li_pic2.jpg" alt=""></a></div>
+								<div class="text">
+									<h3> <a href="">朝阳和珍园</a></h3>
+									<p>区域：朝阳/CBD <br>人均：180元<br>人气：12321
+									</p>
+								</div>
+							</li>
+							<li>
+								<div class="img"> <a href="javascript:;"><img src="img/con_li_pic2.jpg" alt=""></a></div>
+								<div class="text">
+									<h3> <a href="">朝阳和珍园</a></h3>
+									<p>区域：朝阳/CBD <br>人均：180元<br>人气：12321
+									</p>
+								</div>
+							</li>
+						</ul>
+						<a class="more" href="#"> <img src="img/more.jpg" alt=""></a>
+					</div>
+				</div>
+			</div>
+
+			<div class="main_ad"> <a href="#"> <img src="img/ad/ad1.jpg" alt=""></a></div>
+
+			<div class="clear">
+				<div class="section fl">
+					<div class="activity">
+						<img class="bg" src="img/main_bg1.png" alt="">
+						<img class="today" src="img/active.jpg" alt="">
+						<div class="calender">
+							<h3 class="gradient2">
+								<span>MON</span>
+								<span>TUE</span>
+								<span>WED</span>
+								<span>THU</span>
+								<span>FRI</span>
+								<span>STA</span>
+								<span>SUN</span>
+							</h3>
+							<ol class="clear">
+								<li class="active">29</li><li class="active">30</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li><li>11</li><li>12</li><li>13</li><li>14</li><li>15</li><li>16</li><li>17</li><li>18</li><li>19</li>
+								<li>20</li>
+								<li>21 <img class="img1" src="img/today.jpg" alt=""></li>
+								<li>22</li>
+								<li>23</li>
+								<li>24 <img class="img2" src="img/active2.jpg" info="维米尔的写实主义风俗画迟到的荣誉维米尔" alt=""></li>
+								<li>25</li>
+								<li>26</li>
+								<li>27 <img class="img2" src="img/con_li_pic2.jpg" info="美味迟到的荣誉——维米尔的写实主义风俗画迟到的荣誉维米尔" alt=""></li>
+								<li>28</li>
+								<li>29 <img class="img2" src="img/food2.jpg" info="写实主义风俗画迟到的荣誉维米尔" alt=""></li>
+								<li>30</li>
+								<li>31</li>
+								<li  class="active">1</li>
+								<li  class="active">2</li>
+								<li  class="active">3</li>
+								<li class="active">4</li>
+								<li class="active">5</li>
+								<li class="active">6</li>
+								<li class="active">7</li>
+								<li class="active">8</li>
+								<li class="active">9</li>
+							</ol>
+							<div class="today_activity">
+								<span class="ico"></span>
+								<div class="img">
+									<img src="img/today_pic.jpg" alt="">
+								</div>
+								<div class="text">
+									<span><em>FRI</em> 今日主题</span>
+									<p></p>
+									<a href="#"></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="section fr">
+					<div class="recommond">
+						<img class="bg" src="img/main_bg2.jpg" alt="">
+						<div class="pic_ul">
+							<!-- <img src="img/ul_pic1.jpg" alt=""> -->
+							<ul class="img">
+								<li class="li1"></li>
+								<li class="li2"></li>
+								<li class="li3"></li>
+							</ul>
+							<ul class="ul1">
+								<li class="li1 active"></li>
+								<li class="li2"></li>
+								<li class="li3"></li>
+							</ul>
+							<p>爸爸去哪儿~</p>
+						</div>
+					</div>
+					<div class="text_ul">
+						<ul class="ul2">
+							<li>老店换新颜，丰泽园野田重张亮相</li>
+							<li>老店换新颜，丰泽园野田重张亮相</li>
+							<li>生活中哪些商品的包装有缺陷野田</li>
+							<li>老店换新颜，丰泽园野田重张亮相</li>
+							<li>生活中哪些商品的包装有缺陷野田</li>
+							<li>老店换新颜，丰泽园野田重张亮相</li>
+							<li>老店换新颜，丰泽园野田重张亮相</li>
+							<li>生活中哪些商品的包装有缺陷野田</li>
+						</ul>
+						<ul class="ul3">
+							<li>08/07/23</li>
+							<li>08/07/23</li>
+							<li>08/07/23</li>
+							<li>08/07/23</li>
+							<li>08/07/23</li>
+							<li>08/07/23</li>
+							<li>08/07/23</li>
+							<li>08/07/23</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="clear">
+				<div class="options fl">
+					<ul class="nav tabNav2">
+						<li class="active fl">
+							<strong>SUBWAY <span>地铁交通</span></strong>
+							<a class="triangle_down_red" href="javascript:;"></a>
+						</li>
+						<li class="fr gradient">
+							<strong>MAP <span>生活圈</span></strong>
+							<a class="triangle_down_gray" href="javascript:;"></a>
+						</li>
+					</ul>
+					<div class="subway">
+						<img class="tabCon2" src="img/subway.jpg" alt="">
+						<img class="tabCon2" src="img/life.jpg" alt="">
+					</div>
+				</div>
+				<div class="section fr">
+					<h2 class="main_title">
+						<strong>BBS <span>论坛</span></strong>
+						<a href="#"> <img src="img/more.jpg" alt=""></a>
+					</h2>
+					<div class="bbs">
+						<ol>
+							<li class="active">
+								<img src="img/bbs.jpg" alt="">
+								<strong>01</strong>
+								<p>保你没见过的古怪餐厅</p>
+								<b>阿瑞斯</b>
+								<em>世说新语</em>
+								<span>ONE</span>
+							</li>
+							<li >
+								<img src="img/bbs.jpg" alt="">
+								<strong>02</strong>
+								<p>保你没见过的古怪餐厅</p>
+								<b>阿瑞斯</b>
+								<em>世说新语</em>
+								<span>TWO</span>
+							</li>
+							<li>
+								<img src="img/bbs.jpg" alt="">
+								<strong>03</strong>
+								<p>保你没见过的古怪餐厅</p>
+								<b>阿瑞斯</b>
+								<em>世说新语</em>
+								<span>THR</span>
+							</li>
+							<li>
+								<img src="img/bbs.jpg" alt="">
+								<strong>04</strong>
+								<p>保你没见过的古怪餐厅</p>
+								<b>阿瑞斯</b>
+								<em>世说新语</em>
+								<span>FOU</span>
+							</li>
+							<li>
+								<img src="img/bbs.jpg" alt="">
+								<strong>05</strong>
+								<p>保你没见过的古怪餐厅</p>
+								<b>阿瑞斯</b>
+								<em>世说新语</em>
+								<span>FIV</span>
+							</li>
+							<li>
+								<img src="img/bbs.jpg" alt="">
+								<strong>06</strong>
+								<p>保你没见过的古怪餐厅</p>
+								<b>阿瑞斯</b>
+								<em>世说新语</em>
+								<span>SIX</span>
+							</li>
+							<li>
+								<img src="img/bbs.jpg" alt="">
+								<strong>07</strong>
+								<p>保你没见过的古怪餐厅</p>
+								<b>阿瑞斯</b>
+								<em>世说新语</em>
+								<span>SEV</span>
+							</li>
+						</ol>
+					</div>
+				</div>
+			</div>
+
+			<div class="main_ad"> <a href="#"> <img src="img/ad/ad1.jpg" alt=""></a></div>
+
+			<div class="clear">
+				<div class="section fl">
+					<h2 class="main_title">
+						<strong>LIFESTYLE ADVICE <span>知道分子</span></strong>
+						<a href="#"> <img src="img/more.jpg" alt=""></a>
+					</h2>
+					<div class="tab">
+						<ul class="ul tabNav4" >
+							<li  class="active gradient2"><span class="a" href="#">有人在问</span> 
+							    <a class="triangle_down_red" href="javascript:;"></a>
+			
+							</li>
+							<li class="gradient2"><span class="a"  href="#">有人知道</span>
+								<a class="triangle_down_gray" href="javascript:;"></a>
+							</li>
+							<li class="gradient2"><span class="a"  href="#">热门问题</span>
+								<a class="triangle_down_gray" href="javascript:;"></a>
+							</li>
+						</ul>
+						<ul class="know tabCon4"> 
+							<li class="title"> <span style="color:#999;">标题</span> <em>状态</em></li>
+							<li>[<span>休闲</span>] <a href="">推荐几款性价比比较好的冰箱...</a> <em> <img src="img/know.jpg" alt=""></em></li>
+							<li>[<span>休闲</span>] <a href="">推荐几款性价比比较好的冰箱...</a> <em><img src="img/know2.jpg" alt=""></em></li>
+							<li>[<span>休闲</span>] <a href="">推荐几款性价比比较好的冰箱...</a> <em><img src="img/know.jpg" alt=""></em></li>
+							<li>[<span>休闲</span>] <a href="">推荐几款性价比比较好的冰箱...</a> <em><img src="img/know.jpg" alt=""></em></li>
+							<li>[<span>休闲</span>] <a href="">推荐几款性价比比较好的冰箱...</a> <em><img src="img/know2.jpg" alt=""></em></li>
+						</ul>
+						<ul class="know tabCon4"> 
+							<li class="title"> <span style="color:#999;">标题</span> <em>状态</em></li>
+							<li>[<span>休闲</span>] <a href="">推荐几款性价比比较好的电视...</a> <em> <img src="img/know.jpg" alt=""></em></li>
+							<li>[<span>休闲</span>] <a href="">电视几款性价比比较好的有哪些...</a> <em><img src="img/know2.jpg" alt=""></em></li>
+							<li>[<span>休闲</span>] <a href="">推荐几款性价比比较好的冰箱...</a> <em><img src="img/know.jpg" alt=""></em></li>
+							<li>[<span>休闲</span>] <a href="">推荐几款性价比比较好的冰箱...</a> <em><img src="img/know.jpg" alt=""></em></li>
+							<li>[<span>休闲</span>] <a href="">推荐几款性价比比较好的冰箱...</a> <em><img src="img/know2.jpg" alt=""></em></li>
+						</ul>
+						<ul class="know tabCon4"> 
+							<li class="title"> <span style="color:#999;">标题</span> <em>状态</em></li>
+							<li>[<span>休闲</span>] <a href="">几款性价比比较好的冰箱...</a> <em> <img src="img/know.jpg" alt=""></em></li>
+							<li>[<span>休闲</span>] <a href="">推荐几款性价比比较好的冰箱...</a> <em><img src="img/know2.jpg" alt=""></em></li>
+							<li>[<span>休闲</span>] <a href="">推荐几款性价比比较好的冰箱...</a> <em><img src="img/know.jpg" alt=""></em></li>
+							<li>[<span>休闲</span>] <a href="">几款性价比比较好的洗衣机...</a> <em><img src="img/know.jpg" alt=""></em></li>
+							<li>[<span>休闲</span>] <a href="">推荐几款性价比比较好的冰箱...</a> <em><img src="img/know2.jpg" alt=""></em></li>
+						</ul>
+						<div class="soso">
+							<span>搜搜谁知道：</span>
+							<input class="text" type="text">
+							<input class="btn" type="submit" value="">
+						</div>
+					</div>
+					
+				</div>
+				<div class="section fr">
+					<h2 class="main_title">
+						<strong>HOT <span>红人烧客</span></strong>
+						<a href="#"> <img src="img/more.jpg" alt=""></a>
+					</h2>
+					<div class="hot">
+						<ul>
+							<li><img src="img/hot1.jpg" alt=""></li>
+							<li><img src="img/hot2.jpg" alt=""></li>
+							<li class="area1">
+								<img src="img/hot3.jpg" alt="">
+								<div>
+									<p>用户名：性感宝贝<br>区域：朝阳CBD <br>人气：124987b 		<br>
+									</p>
+								</div>
+							</li>
+							<li>
+								<img src="img/hot4.jpg" alt="">
+								<div></div>
+							</li>
+							<li><img src="img/hot5.jpg" alt=""></li>
+							<li class="area2"><img src="img/hot6.jpg" alt=""></li>
+							<li class="area2"><img src="img/hot7.jpg" alt=""></li>
+							<li><img src="img/hot8.jpg" alt=""></li>
+							<li><img src="img/hot9.jpg" alt=""></li>
+							<li class="area2"><img src="img/hot10.jpg" alt=""></li>
+							<li class="area2"><img src="img/hot11.jpg" alt=""></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="clear">
+				<div class="section fl">
+					<h2 class="main_title">
+						<strong>HELP <span>在线帮助</span></strong>
+					</h2>
+					<div class="help">
+						<div class="contact">
+							<p>您有任何问题,都可以通过全国免费电话,或MSN在线客服与我们联系!</p>
+							<a class="tel" href="#"></a><a class="msn" href="#"></a>
+						</div>
+						<div class="user">
+							<p>用户帮助</p>
+							<ul>
+								<li><a href="#"></a>金币是什么</li>
+								<li><a href="#"></a>怎样查看我的等级</li>
+								<li><a href="#"></a>怎么赚积分</li>
+							</ul>
+						</div>
+						<div class="mer">
+							<p>用户帮助</p>
+							<ul>
+								<li>如何成为明星商户</li>
+								<li>邮件推广</li>
+								<li>论坛推广方式</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="section fr">
+					<h2 class="main_title">
+						<strong>100DU IN THE MEDIA <span>媒体声音</span></strong>
+						<a href="#"> <img src="img/more.jpg" alt=""></a>
+					</h2>
+					<ul class="media">
+						<li class="li1">日本最大财经杂志《砖石周刊》对100度享乐网的报道</li>
+						<li class="li2">视频网站100度享乐网获网络视听许可证</li>
+						<li class="li3">互联网上的视频橱窗</li>
+						<li class="li4">享乐主义的机会</li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="side fr">
+
+			<div class="side_section side_loda">
+				<h2 class="main_title gradient h2_loda">
+					<strong>LODA <span>登录</span></strong>
+				</h2>
+				<div class="loda">
+					<table>
+						<tbody >
+							<tr>
+								<td>
+									<span>用户名：</span>
+								</td>
+								<td>
+									<input class="text" type="text">
+								</td>
+								<td>
+									<input class="checkbox" type="checkbox"> <span>记住我</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<span>密码：</span>
+								</td>
+								<td>
+									<input type="password" class="password">
+								</td>
+								<td>
+									<input type="button" class="btn">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div>
+						<a href="#">新用户注册</a>
+						<a href="#">忘记密码了</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="side_ad ad_section"> <a href="#"> <img src="img/ad/ad2.jpg" alt=""></a></div>
+
+			<div class="side_ad"> <a href="#"> <img src="img/ad/ad3.jpg" alt=""></a></div>
+
+			<div class="side_section">
+				<h2 class="main_title">
+					<strong>COUPONS <span>抢卷儿</span></strong>
+					<a href="#"> <img src="img/more.jpg" alt=""></a>
+				</h2>
+				<div class="tab">
+					<ul class="ul tabNav3">
+						<li class="active gradient2"><span class="a" href="#">人气</span>
+						    <a class="triangle_down_red" href="javascript:;"></a>
+						</li>
+						<li class="gradient2"><span class="a"  href="#">推荐</span>
+							<a class="triangle_down_gray" href="javascript:;"></a>
+						</li>
+						<li class="gradient2"><span class="a"  href="#">最新</span>
+							<a class="triangle_down_gray" href="javascript:;"></a>
+						</li>
+					</ul>
+				</div>
+				
+				<ul class="store_list tabCon3""> 
+					<li class="store_name"><a>商店名</a><em>省</em><span>打印</span></li>
+					<li><a href="#">老北京一尊皇牛</a><em>12%</em><span>345</span></li>
+					<li><a href="#">老北京一尊皇牛</a><em>12%</em><span>345</span></li>
+					<li><a href="#">老北京一尊皇牛</a><em>12%</em><span>345</span></li>
+					<li><a href="#">老北京一尊皇牛</a><em>12%</em><span>345</span></li>
+					<li><a href="#">老北京一尊皇牛</a><em>12%</em><span>345</span></li>
+				</ul>
+				<ul class="store_list tabCon3""> 
+					<li class="store_name"><a>商店名</a><em>省</em><span>打印</span></li>
+					<li><a href="#">天津皇牛</a><em>14%</em><span>345</span></li>
+					<li><a href="#">天津皇牛</a><em>14%</em><span>345</span></li>
+					<li><a href="#">天津皇牛</a><em>14%</em><span>345</span></li>
+					<li><a href="#">天津皇牛</a><em>14%</em><span>345</span></li>
+					<li><a href="#">天津皇牛</a><em>14%</em><span>345</span></li>
+				</ul>
+				<ul class="store_list tabCon3""> 
+					<li class="store_name"><a>商店名</a><em>省</em><span>打印</span></li>
+					<li><a href="#">老成都肥肠</a><em>15%</em><span>345</span></li>
+					<li><a href="#">老成都肥肠</a><em>16%</em><span>345</span></li>
+					<li><a href="#">老成都肥肠</a><em>15%</em><span>345</span></li>
+					<li><a href="#">老成都肥肠</a><em>15%</em><span>345</span></li>
+					<li><a href="#">老成都肥肠</a><em>14%</em><span>345</span></li>
+				</ul>
+			</div>
+
+			<div class="side_section">
+				<h2 class="main_title">
+					<strong>SHOP <span>今日推荐</span></strong>
+					<a href="#"> <img src="img/more.jpg" alt=""></a>
+				</h2>
+				<ul class="recom">
+					<li>
+						<div class="img"> <img src="img/recom.jpg" alt=""></div>
+						<div class="text">
+							<p class="p1">汉莱国际美食百汇</p>
+							<p class="p2"><span>口味：</span>创意中餐<br>
+							<span>区域：</span>朝阳/CBD</p>
+						</div>
+					</li>
+					<li>
+						<div class="img"> <img src="img/recom.jpg" alt=""></div>
+						<div class="text">
+							<p class="p1">汉莱国际美食百汇</p>
+							<p class="p2"><span>口味：</span>创意中餐<br>
+							<span>区域：</span>朝阳/CBD</p>
+						</div>
+					</li>
+					<li>
+						<div class="img"> <img src="img/recom.jpg" alt=""></div>
+						<div class="text">
+							<p class="p1">汉莱国际美食百汇</p>
+							<p class="p2"><span>口味：</span>创意中餐<br>
+							<span>区域：</span>朝阳/CBD</p>
+						</div>
+					</li>
+					<li>
+						<div class="img"> <img src="img/recom.jpg" alt=""></div>
+						<div class="text">
+							<p class="p1">汉莱国际美食百汇</p>
+							<p class="p2"><span>口味：</span>创意中餐<br>
+							<span>区域：</span>朝阳/CBD</p>
+						</div>
+					</li>
+				</ul>
+			</div>
+
+			<div class="side_section">
+				<h2 class="main_title">
+					<strong>360° SHOP <span>全景逛店</span></strong>
+					<a href="#"> <img src="img/more.jpg" alt=""></a>
+				</h2>
+				<div class="view">
+					<img src="img/view.jpg" alt="">
+					<p>苹果雪梨排骨汤</p>
+				</div>
+			</div>
+
+			<div class="side_section">
+				<h2 class="main_title">
+					<strong>SHOP <span>折扣店</span></strong>
+					<a href="#"> <img src="img/more.jpg" alt=""></a>
+				</h2>
+				<div class="discont">
+						<div class="img"> <img src="img/recom.jpg" alt=""></div>
+						<div class="text">
+							<p class="p1">汉莱国际美食百汇</p>
+							<p class="p2"><span>口味：</span>创意中餐<br>
+							<span>区域：</span>朝阳/CBD</p>
+						</div>
+				</div>
+				<ul class="store2">
+						<li><span>[</span><span  style="color:#c75d61">休闲</span><span>]</span> 翰茶缘（雍和宫店）</li>
+						<li><span>[</span><span  style="color:#c75d61">休闲</span><span>]</span> 翰茶缘（雍和宫店）</li>
+						<li><span>[</span><span  style="color:#c75d61">美食</span><span>]</span> 老北京一尊皇牛</li>
+						<li><span>[</span><span  style="color:#c75d61">购物</span><span>]</span> 老北京一尊皇牛</li>
+						<li><span>[</span><span  style="color:#c75d61">休闲</span><span>]</span> 翰茶缘（雍和宫店）</li>
+						<li><span>[</span><span  style="color:#c75d61">美食</span><span>]</span> 老北京一尊皇牛</li>
+						<li><span>[</span><span  style="color:#c75d61">美食</span><span>]</span> 老北京一尊皇牛</li>
+						<li><span>[</span><span  style="color:#c75d61">美食</span><span>]</span> 老北京一尊皇牛</li>
+					</ul>
+			</div>
+
+			<div class="side_section">
+				<h2 class="main_title">
+					<strong>COUPONS <span>最新加盟</span></strong>
+					<a href="#"> <img src="img/more.jpg" alt=""></a>
+				</h2>
+				<div class="food">
+					<div class="li1">
+						<img src="img/food1.jpg" alt="">
+						<p class="p1">汉莱国际美食百汇</p>
+						<p class="p2"><span>口味：</span>创意中餐<br><span>区域：</span>朝阳CBD</p>
+					</div>
+					<div class="li2">
+						<img src="img/food2.jpg" alt="">
+						<p class="p1">汉莱国际美食百汇</p>
+						<p class="p2"><span>口味：</span>创意中餐<br><span>区域：</span>朝阳CBD</p>
+					</div>
+				</div>
+				<ul class="store">
+					<li><span>[</span><span  style="color:#c75d61">休闲</span><span>]</span> 翰茶缘（雍和宫店）</li>
+					<li><span>[</span><span  style="color:#c75d61">休闲</span><span>]</span> 翰茶缘（雍和宫店）</li>
+					<li><span>[</span><span  style="color:#c75d61">美食</span><span>]</span> 老北京一尊皇牛</li>
+					<li><span>[</span><span  style="color:#c75d61">购物</span><span>]</span> 老北京一尊皇牛</li>
+					<li><span>[</span><span  style="color:#c75d61">休闲</span><span>]</span> 翰茶缘（雍和宫店）</li>
+					<li><span>[</span><span  style="color:#c75d61">美食</span><span>]</span> 老北京一尊皇牛</li>
+				</ul>
+			</div>
+
+			
+
+		</div>
+
+	</div>
+
+	<div id="footer">
+		<div class="link">
+			<a class="a1" href="#">关于我们</a><a href="#">联系我们</a><a href="#">版权声明</a><a href="#">加入我们</a><a href="#">问题反馈</a><a href="#">友情链接</a><a href="#">网站地图</a><a href="#">视频索引</a>
+		</div>
+		<div class="bottom">
+			<p>Copyright 2008 www.100du.com 100度享乐网 版权所有 京ICP证070374号</p>
+		</div>
+	</div>
+</body>
+</html>
