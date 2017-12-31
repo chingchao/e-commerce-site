@@ -1,3 +1,3 @@
-##a demo 
+## a html demo
 
-[preview html](http://htmlpreview.github.io/?https://github.com/chingchao/e-commerce-site/blob/master/index.html)
+[preview demo](http://htmlpreview.github.io/?https://github.com/chingchao/e-commerce-site/blob/master/index.html)
